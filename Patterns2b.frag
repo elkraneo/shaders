@@ -28,32 +28,24 @@ float box(vec2 _st, vec2 _size, float _smoothEdges){
     return uv.x*uv.y;
 }
 
-float cross(in vec2 _st, float _size){
-    return  box(_st, vec2(_size,_size/4.), .01) +
-            box(_st, vec2(_size/4.,_size), .01);
-}
-
 void main(void){
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     vec3 color = vec3(0.0);
    
     st = rotate2D(st,cos(u_time * PI*0.25));
 
-    // Divide the space in 4
+    // Divide the space in 2
     st = tile(st,2.);
 
     // Use a matrix to rotate the space 45 degrees
     st = rotate2D(st,sin(u_time * PI*0.25));
 
-
+    // Divide the space once more
     st = tile(st,1.);
     st = rotate2D(st,cos(u_time * PI*0.25));
-    //color = vec3(st,0.0);
 
-    // Draw a square
-    //color *= vec3(box(st,vec2(.3), .01));
+    // Draw
     color = vec3(st,.7);
-
 
     gl_FragColor = vec4(color,1.0);
 }
