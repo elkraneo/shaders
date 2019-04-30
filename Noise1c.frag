@@ -26,12 +26,12 @@ float noise(in vec2 st) {
     float d = random(i + vec2(1.0, 1.0));
 
     // Smooth Interpolation
-    vec2 u = smoothstep(0.,1.,f);
+    vec2 u = smoothstep(0., 1., f);
 
     // Mix 4 coorners percentages
     return mix(a, b, u.x) +
-            (c - a)* u.y * (1.0 - u.x) +
-            (d - b) * u.x * u.y;
+              (c - a) * u.y * (1.0 - u.x) +
+              (d - b) * u.x * u.y;
 }
 
 vec2 rotate2D(vec2 _st, float _angle) {
@@ -43,14 +43,14 @@ vec2 rotate2D(vec2 _st, float _angle) {
 }
 
 float box(in vec2 _st, in vec2 _size){
-    _size = vec2(0.5) - _size*0.5;
+    _size = vec2(0.5) - _size * 0.5;
     vec2 uv = smoothstep(_size,
-                        _size+vec2(0.001),
-                        _st);
+                         _size + vec2(0.001),
+                         _st);
     uv *= smoothstep(_size,
-                    _size+vec2(0.001),
-                    vec2(1.0)-_st);
-    return uv.x*uv.y;
+                     _size + vec2(0.001),
+                     vec2(1.0) - _st);
+    return uv.x * uv.y;
 }
 
 
@@ -65,12 +65,11 @@ float circle(in vec2 _st, in float _radius) {
 
 void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
-    st.x *= u_resolution.x/u_resolution.y;
     vec3 color = vec3(0.0);
 
     // Scale the coordinate system to see
     // some noise in action
-    vec2 pos = vec2(st * 7.);
+    vec2 pos = vec2(st * 3.5);
 
     // Use the noise function
     float n = noise(pos) * cos(u_time);
