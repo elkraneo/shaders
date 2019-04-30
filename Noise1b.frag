@@ -66,13 +66,13 @@ void main() {
     //st *= rotate2D(st, sin(u_time));
     // Scale the coordinate system to see
     // some noise in action
-    vec2 pos = vec2(st * 3.);
+    vec2 pos = vec2(st * 2.);
 
     // Use the noise function
     float n = noise(pos) * cos(u_time);
     pos *= cos(n);
     pos += sin(n);
 
-    float color = circle(vec2(pos), .6);
+    float color = circle(vec2(pos), 0.57);
     gl_FragColor = vec4(vec3(color), 1.0);
 }
