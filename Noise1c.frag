@@ -68,35 +68,34 @@ float circle(in vec2 _st, in float _radius) {
 void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     vec3 color = vec3(0.0);
-    st -= vec2(0.5);
+    //st -= vec2(0.5);
 
 
     // Scale the coordinate system to see
     // some noise in action
-    vec2 pos = vec2(st * 21.);
+    vec2 pos = vec2(st * 7.);
 
-
-    color += vec3(circle(vec2(pos), .07));
 
     // Use the noise function
     float n = noise(pos);
     pos = rotate2D(pos, sin(u_time) * PI);
-    pos += n;
+    pos *= n;
 
-    color += vec3(box(vec2(pos - 0.5), vec2(0.7)));
-    color += vec3(box(vec2(pos - 1.),  vec2(1.7)));
-    color += vec3(box(vec2(pos - 1.5), vec2(2.7)));
-    color += vec3(box(vec2(pos - 2.),  vec2(3.7)));
-    color += vec3(box(vec2(pos - 2.5), vec2(4.7)));
-    color += vec3(box(vec2(pos - 3.),  vec2(5.7)));
-    color += vec3(box(vec2(pos - 3.5), vec2(6.7)));   
-    // color += vec3(box(vec2(pos - 4.),  vec2(7.7)));
-    // color += vec3(box(vec2(pos - 4.5), vec2(8.7)));
-    // color += vec3(box(vec2(pos - 5.),  vec2(9.7)));
-    // color += vec3(box(vec2(pos - 5.5), vec2(10.7)));
-    // color += vec3(box(vec2(pos - 6.),  vec2(11.7)));
-    // color += vec3(box(vec2(pos - 6.5), vec2(12.7)));
-    // color += vec3(box(vec2(pos - 7.),  vec2(13.7)));
+    color += vec3(circle(vec2(pos), n));
+    color += vec3(box(vec2(pos - 0.1), vec2(n)));
+    color += vec3(box(vec2(pos - 0.2), vec2(n)));
+    color += vec3(box(vec2(pos - 0.3), vec2(n)));
+    color += vec3(box(vec2(pos - 0.4), vec2(n)));
+    color += vec3(box(vec2(pos - 0.5), vec2(n)));
+    color += vec3(box(vec2(pos - 0.6), vec2(n)));
+    color += vec3(box(vec2(pos - 0.7), vec2(n)));   
+    color += vec3(box(vec2(pos - 0.8), vec2(n)));
+    color += vec3(box(vec2(pos - 0.9), vec2(n)));
+    color += vec3(box(vec2(pos - 1.0), vec2(n)));
+    color += vec3(box(vec2(pos - 1.1), vec2(n)));
+    color += vec3(box(vec2(pos - 1.2), vec2(n)));
+    color += vec3(box(vec2(pos - 1.3), vec2(n)));
+    color += vec3(box(vec2(pos - 1.4), vec2(n)));
 
     // st *= rotate2D(st, cos(u_time) * PI);
     color *= vec3(st.x, st.y, .7);
