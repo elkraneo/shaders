@@ -86,6 +86,7 @@ void main() {
     }
 
     color *= vec3(st.x, st.y, .7);
+    color += vec3(st.x, st.y, .7);
 
     gl_FragColor = vec4(vec3(color), 1.0);
 }
