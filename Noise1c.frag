@@ -8,6 +8,8 @@ uniform float u_time;
 
 //---------------------------------------------------------------------
 
+#define PI 3.14159265358979323846
+
 // 2D Random
 float random(in vec2 _st) {
     return fract(sin(dot(_st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
@@ -66,34 +68,38 @@ float circle(in vec2 _st, in float _radius) {
 void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     vec3 color = vec3(0.0);
+    st -= vec2(0.5);
+
 
     // Scale the coordinate system to see
     // some noise in action
-    vec2 pos = vec2(st * 3.5);
+    vec2 pos = vec2(st * 21.);
+
+
+    color += vec3(circle(vec2(pos), .07));
 
     // Use the noise function
-    float n = noise(pos) * cos(u_time);
+    float n = noise(pos);
+    pos = rotate2D(pos, sin(u_time) * PI);
+
+    
     pos *= cos(n);
-    pos /= sin(n);
-    pos -= 3.;
-    pos *= rotate2D(vec2(pos), u_time).y;
-
-    color += vec3(box(vec2(pos), vec2(0.7)));
     color += vec3(box(vec2(pos - 0.5), vec2(0.7)));
-    color += vec3(box(vec2(pos - 1.),  vec2(0.7)));
-    color += vec3(box(vec2(pos - 1.5), vec2(0.7)));
-    color += vec3(box(vec2(pos - 2.),  vec2(0.7)));
-    color += vec3(box(vec2(pos - 2.5), vec2(0.7)));
-    color += vec3(box(vec2(pos - 3.),  vec2(0.7)));
-    color += vec3(box(vec2(pos - 3.5), vec2(0.7)));
-    color += vec3(box(vec2(pos - 4.),  vec2(0.7)));
-    color += vec3(box(vec2(pos - 4.5), vec2(0.7)));
-    color += vec3(box(vec2(pos - 5.),  vec2(0.7)));
-    color += vec3(box(vec2(pos - 5.5), vec2(0.7)));
-    color += vec3(box(vec2(pos - 6.),  vec2(0.7)));
-    color += vec3(box(vec2(pos - 6.5), vec2(0.7)));
-    color += vec3(box(vec2(pos - 7.),  vec2(0.7)));
+    color += vec3(box(vec2(pos - 1.),  vec2(1.7)));
+    color += vec3(box(vec2(pos - 1.5), vec2(2.7)));
+    color += vec3(box(vec2(pos - 2.),  vec2(3.7)));
+    color += vec3(box(vec2(pos - 2.5), vec2(4.7)));
+    color += vec3(box(vec2(pos - 3.),  vec2(5.7)));
+    color += vec3(box(vec2(pos - 3.5), vec2(6.7)));   
+    // color += vec3(box(vec2(pos - 4.),  vec2(7.7)));
+    // color += vec3(box(vec2(pos - 4.5), vec2(8.7)));
+    // color += vec3(box(vec2(pos - 5.),  vec2(9.7)));
+    // color += vec3(box(vec2(pos - 5.5), vec2(10.7)));
+    // color += vec3(box(vec2(pos - 6.),  vec2(11.7)));
+    // color += vec3(box(vec2(pos - 6.5), vec2(12.7)));
+    // color += vec3(box(vec2(pos - 7.),  vec2(13.7)));
 
+    // st *= rotate2D(st, cos(u_time) * PI);
     color *= vec3(st.x, st.y, .7);
 
     gl_FragColor = vec4(vec3(color), 1.0);
