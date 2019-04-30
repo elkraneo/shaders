@@ -81,9 +81,8 @@ void main() {
     // Use the noise function
     float n = noise(pos);
     pos = rotate2D(pos, sin(u_time) * PI);
+    pos += n;
 
-    
-    pos *= cos(n);
     color += vec3(box(vec2(pos - 0.5), vec2(0.7)));
     color += vec3(box(vec2(pos - 1.),  vec2(1.7)));
     color += vec3(box(vec2(pos - 1.5), vec2(2.7)));
