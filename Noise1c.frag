@@ -68,36 +68,23 @@ float circle(in vec2 _st, in float _radius) {
 void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     vec3 color = vec3(0.0);
-    //st -= vec2(0.5);
+    st -= vec2(0.5);
+    st *= rotate2D(st, cos(u_time) / 2. * PI);
 
 
     // Scale the coordinate system to see
     // some noise in action
-    vec2 pos = vec2(st * 7.);
-
+    vec2 pos = vec2(st * 21.);
 
     // Use the noise function
     float n = noise(pos);
-    pos = rotate2D(pos, sin(u_time) * PI);
-    pos *= n;
+    // pos *= n;
 
-    color += vec3(circle(vec2(pos), n));
-    color += vec3(box(vec2(pos - 0.1), vec2(n)));
-    color += vec3(box(vec2(pos - 0.2), vec2(n)));
-    color += vec3(box(vec2(pos - 0.3), vec2(n)));
-    color += vec3(box(vec2(pos - 0.4), vec2(n)));
-    color += vec3(box(vec2(pos - 0.5), vec2(n)));
-    color += vec3(box(vec2(pos - 0.6), vec2(n)));
-    color += vec3(box(vec2(pos - 0.7), vec2(n)));   
-    color += vec3(box(vec2(pos - 0.8), vec2(n)));
-    color += vec3(box(vec2(pos - 0.9), vec2(n)));
-    color += vec3(box(vec2(pos - 1.0), vec2(n)));
-    color += vec3(box(vec2(pos - 1.1), vec2(n)));
-    color += vec3(box(vec2(pos - 1.2), vec2(n)));
-    color += vec3(box(vec2(pos - 1.3), vec2(n)));
-    color += vec3(box(vec2(pos - 1.4), vec2(n)));
+    for(int i = 0; i <= 10; i++) {  
+        pos = rotate2D(pos + n, sin(u_time) / 2. + PI);
+        color += vec3(box(pos, vec2(n + float(i))));
+    }
 
-    // st *= rotate2D(st, cos(u_time) * PI);
     color *= vec3(st.x, st.y, .7);
 
     gl_FragColor = vec4(vec3(color), 1.0);
