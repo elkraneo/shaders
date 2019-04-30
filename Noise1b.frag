@@ -73,6 +73,6 @@ void main() {
     pos *= cos(n);
     pos += sin(n);
 
-    float color = circle(vec2(pos), .56);
+    float color = circle(vec2(pos), .57);
     gl_FragColor = vec4(vec3(color), 1.0);
 }
