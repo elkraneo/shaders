@@ -1,5 +1,5 @@
 #ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
 uniform vec2 u_resolution;
@@ -46,8 +46,7 @@ void main() {
 
     // Use the noise function
     float n = noise(pos) / pos.y;
-    float t = sin(u_time);
-    n += sin(t * 2.) / t;
+    n += sin(u_time * 2.) / sin(u_time);
     n -= 1.7;
     gl_FragColor = vec4(vec3(n, .7, .7), 1.0);
 }
