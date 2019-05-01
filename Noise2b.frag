@@ -46,7 +46,8 @@ void main() {
 
     // Use the noise function
     float n = noise(pos) / pos.y;
-    n += (sin(fract(u_time)) * 10.) / 10.;
-    n -= .7;
+    float t = sin(u_time);
+    n += t * 2. / t;
+    n -= 1.7;
     gl_FragColor = vec4(vec3(n, .7, .7), 1.0);
 }
