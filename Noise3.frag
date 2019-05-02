@@ -1,5 +1,5 @@
 #ifdef GL_ES
-precision highp float;
+precision mediump float;
 #endif
 
 uniform vec2 u_resolution;
@@ -43,7 +43,7 @@ float shapeBorder(vec2 st, float radius, float width) {
 
 void main() {
     vec2 st = gl_FragCoord.xy / u_resolution.xy;
-    //st.x *= u_resolution.x/u_resolution.y;
+    st.x *= u_resolution.x/u_resolution.y;
 
     float t = 1.0;
     t *= abs(1.0 - sin(u_time * .35)) * 7.;
