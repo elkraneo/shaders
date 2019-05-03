@@ -15,9 +15,9 @@ vec2 random2(vec2 st) {
     dot(st, vec2(269.5, 183.3)));
     #ifdef GL_ES
  	return -1.0 + 2.0 * fract(sin(st));
-	#else
-    return -1.0 + 2.0 * fract(sin(st) * SEED);
-	#endif
+    #else
+        return -1.0 + 2.0 * fract(sin(st) * SEED);
+    #endif
 }
 
 // Gradient Noise by Inigo Quilez - iq/2013
