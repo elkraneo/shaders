@@ -8,12 +8,16 @@ uniform float u_time;
 
 //---------------------------------------------------------------------
 
-#define seed 43758.5453123
+#define SEED 43758.5453123
 
 vec2 random2(vec2 st) {
   st = vec2(dot(st, vec2(127.1, 311.7)),
     dot(st, vec2(269.5, 183.3)));
-  return -1.0 + 2.0 * fract(sin(st) * seed);
+    #ifdef GL_ES
+ 	return -1.0 + 2.0 * fract(sin(st));
+	#else
+    return -1.0 + 2.0 * fract(sin(st) * SEED);
+	#endif
 }
 
 // Gradient Noise by Inigo Quilez - iq/2013
