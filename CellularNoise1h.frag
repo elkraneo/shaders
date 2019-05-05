@@ -10,7 +10,6 @@ uniform float u_time;
 
 #define MAX_POINTS 14
 
-
 float circle(in vec2 _st, in float _radius) {
   vec2 dist = _st - vec2(0.5);
   return 1. - smoothstep(_radius - (_radius * 0.01),
@@ -18,13 +17,8 @@ float circle(in vec2 _st, in float _radius) {
    dot(dist, dist) * 4.0);
 }
 
-
 float shapeBorder(vec2 st, float radius, float width) {
     return circle(st, radius) - circle(st, radius - width);
-}
-
-float random(in float x) {
-    return fract(sin(x) * 1e4);
 }
 
 // YUV to RGB matrix
@@ -45,15 +39,13 @@ void main() {
 
     // Use polar coordinates instead of cartesian
     vec2 toCenter = vec2(0.5) - st;
-    float angle = atan(toCenter.y, toCenter.x);
+    // float angle = atan(toCenter.y, toCenter.x);
     float radius = length(toCenter) * 2.0;
     
     vec3 color = vec3(.0);
 
     st *= radius * 14.;
     st += cos(abs(u_time) - 3.);
-
-    vec2 circularMotion = vec2(sin(u_time), cos(u_time));
 
     vec2 point[MAX_POINTS];
 
@@ -74,7 +66,6 @@ void main() {
 
     color += shapeBorder(vec2(m_dist), m_dist, .7);
     color += step(.7, abs(sin(7. * m_dist)));
-    
     color -= vec3(st, .7);
     color -= rgb2yuv[2];
 
