@@ -1,12 +1,39 @@
 <html>
 	<head>
 		<title>Canvas Shader</title>
+		<style>
+			* {
+			  margin: 0;
+			  padding: 0;
+			}
+			
+			body {
+				background-color: #111;
+			}
+		</style>
 	</head>
 	<body>
 		<section>
-			<canvas class="glslCanvas" data-fragment-url="./Voronoi2.frag" width="500" height="500">
+			<canvas class="glslCanvas" data-fragment-url="./Voronoi2.frag" width="100%" height="100%">
 			</canvas>
 		</section>
 	</body>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/dist/GlslCanvas.js"></script>
+
+	<script>
+		function resize() {
+		  var leSize = $('.glslCanvas').parent().width();
+		  $('.glslCanvas').width(leSize);
+		  $('.glslCanvas').height(leSize);
+		}
+		
+		$(window).resize(function() {
+		  resize();
+		});
+		
+		$(window).bind("load", function() {
+			resize();
+		});
+	</script>
 </html>
