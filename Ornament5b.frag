@@ -61,6 +61,17 @@ float line(in vec2 p, in float a, in float t) {
 vec2 tile(in vec2 p, vec2 w) { return fract(mod(p + w / 2.0, w)) - (w / 2.0); }
 vec2 tile(in vec2 p, float w) { return tile(p, vec2(w)); }
 
+vec2 tile2(vec2 _st, float _zoom){
+    _st *= _zoom;
+    return fract(_st);
+}
+
+/* Rotation function */
+mat2 rotate2d(float _angle){
+    return mat2(cos(_angle),-sin(_angle),
+                sin(_angle),cos(_angle));
+}
+
 /* Shape 2D segment */
 float sSegment(in vec2 a, in vec2 b) {
     vec2 ba = a - b;
@@ -69,6 +80,22 @@ float sSegment(in vec2 a, in vec2 b) {
 }
 float segment(in vec2 a, in vec2 b, float t) {
     float d = sSegment(a, b);
+    return stroke(d, t);
+}
+
+/* Shape 2D poly */
+float sPoly(in vec2 p, in float w, in int sides) {
+    float a = atan(p.x, p.y) + PI;
+    float r = TWO_PI / float(sides);
+    float d = cos(floor(0.5 + a / r) * r - a) * length(max(abs(p) * 1.0, 0.0));
+    return d * 2.0 - w;
+}
+float poly(in vec2 p, in float w, in int sides) {
+    float d = sPoly(p, w, sides);
+    return fill(d);
+}
+float poly(in vec2 p, in float w, in int sides, in float t) {
+    float d = sPoly(p, w, sides);
     return stroke(d, t);
 }
 
@@ -97,55 +124,65 @@ float borders(in vec2 p, in float w) {
     return m;
 }
 
-/* Band Motives */
-float bandMotive1(in vec2 p, in vec3 w, in float width) {
-    
-    float amplitude = w.x;
-    float frequency = w.y;
-    float phase     = w.z;
-
+/* Corner */
+float corner(in vec2 p, in vec2 d, in float a, float width) {
     float m = 0.0;
-    float spacing = phase + frequency;
+    p -= 0.5;
+    p = rotate2d(a) * p;
 
-    // Horizontal
-    m += segment(vec2(mod(p.x, spacing), p.y), 
-                 vec2(mod(p.x, spacing) - phase, p.y), width);
+    mat2 s1 = mat2(p.x       , p.y, 
+                   p.x + d[0], p.y);
 
-    m += segment(vec2(mod(p.x, spacing), p.y - amplitude), 
-                 vec2(mod(p.x + frequency, spacing) - frequency, p.y - amplitude), width);
+    mat2 s2 = mat2(p.x + d[0], p.y, 
+                   p.x + d[0], p.y - d[1]);
 
-    // Vertical
-    m += segment(vec2(mod(p.x, spacing), p.y), 
-                 vec2(mod(p.x, spacing), p.y - amplitude), width);
-
-    m += segment(vec2(mod(p.x + frequency, spacing), p.y), 
-                 vec2(mod(p.x + frequency, spacing), p.y - amplitude), width);
+    m += segment(s1[0], s1[1], width);
+    m += segment(s2[0], s2[1], width);
 
     return m;
 }
 
-void main() {
-    //vec2 p = st;
-vec2 p = vec2(st.x - abs((u_time / 2.)), st.y);
+/* Band Motives */
+float bandMotive8(vec2 p, float width) {
+    float m = 0.0;
 
+    p.x += 0.1;
+
+    float n = 0.4;
+
+    m += corner(p, vec2(n, n + 0.2), -HALF_PI, width);
+    m += corner(p, vec2(n, n), PI, width);
+    p.x -= n;
+    p.y += n;
+    m += corner(p, vec2(n * 2. - width / 2., n * 2.), 0.0, width);
+
+    return m;
+}
+
+
+void main() {
+    // Use polar coordinates instead of cartesian
+    vec2 toCenter = st;
+    float angle = atan(toCenter.y, toCenter.x);
+    float radius = length(toCenter) * 2.0;
     vec3 color = vec3(0.0);
+
+    vec2 p = vec2(radius - abs(cos(u_time / 3.5)), angle);
+    p = tile2(p, 3.);
+
     color += grid(p, .1);
 
-    float width = 0.0035;
+    // RGB to YUV matrix
+    mat3 rgb2yuv = mat3(0.2126,   0.7152,  0.0722,
+                       -0.09991, -0.33609, 0.43600,
+                        0.615,   -0.5586, -0.05639);
 
-    // 1
-    p.y -= 0.2;
-    color += bandMotive1(p, vec3(0.2, 0.1, 0.1), width);
 
-    // 2
-    p.y += 0.3;
-    color += bandMotive1(p, vec3(0.2, 0.05, 0.4),  width);
+    color.r += bandMotive8(p, 0.035) - radius;
+    color.g += bandMotive8(p + 0.84, 0.035) * angle;
+    color.b += bandMotive8(p + 0.77, 0.035) / angle;
 
-    // 3
-    p.y += 0.3;
-    color += bandMotive1(p, vec3(0.2, 0.2, 0.1),  width);
-    color += bandMotive1(p, vec3(0.1, 0.1, 0.2), width);
-
+    color += color * rgb2yuv - radius;
 
     gl_FragColor = vec4(color, 1.0);
 }
