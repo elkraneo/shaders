@@ -120,8 +120,7 @@ void main() {
     color += arc(toCenter, d, -HALF_PI / 2., PI + HALF_PI, s);
     color += arc(toCenter, d / 2.0, 0.0, TWO_PI, s / 2.0);
    
-    toCenter.x += 0.1;
-    toCenter.y += 0.1;
+    toCenter += 0.1;
     color += arc(toCenter, d, PI - HALF_PI / 2., PI + HALF_PI, s);
     color += arc(toCenter, d / 2.0, 0.0, TWO_PI, s / 2.0);
 
