@@ -112,8 +112,8 @@ void main() {
     float d = fract(PI);
     float s = 0.01;
 
-    toCenter = tile(vec2(angle  - abs(cos(u_time / 3.5)), 
-                         radius + abs(cos(u_time / 3.5))), 
+    toCenter = tile(vec2(angle  + abs(u_time / 7.), 
+                         radius - abs(u_time / 7.)), 
                     vec2(0.2, d * 2.5));
 
     toCenter.x -= 0.1;
