@@ -86,21 +86,6 @@ float grid(in vec2 p, in float w) {
     return d + g;
 }
 
-/* Shape 2D rect */
-float sRect(in vec2 p, in vec2 w) {    
-    float d = max(abs(p.x / w.x), abs(p.y / w.y)) * 2.0;
-    float m = max(w.x, w.y);
-    return d * m - m;
-}
-float rect(in vec2 p, in vec2 w) {
-    float d = sRect(p, w);
-    return fill(d);
-}
-float rect(in vec2 p, in vec2 w, in float t) {
-    float d = sRect(p, w);
-    return stroke(d, t);
-}
-
 /* Band Motive Segments */
 float bandMotive5Plate2(in vec2 p, in float w) {
     float bm = 0.0;
@@ -120,7 +105,9 @@ float bandMotive5Plate2(in vec2 p, in float w) {
                   p + vec2(n * 2.0, -n), 
                   w);
 
-    // bm += rect(p + vec2(n + n / 2.0, -n - n / 2.0), vec2(0.1));
+    bm += segment(p + vec2(-n, -n), 
+                  p + vec2(-n, -n * 2.0), 
+                  w);
 
     bm += segment(p + vec2(n, -n), 
                   p + vec2(n, -n * 2.0), 
@@ -161,9 +148,8 @@ void main() {
     float radius = length(toCenter) * 2.0;
 
     toCenter *= rotate(toCenter, abs(u_time / 21.0)); 
-    toCenter = tile(toCenter, vec2(0.305, 0.305));
-
-    color += grid(toCenter, .1);
+    toCenter = tile(toCenter, vec2(0.3, 0.3));
+    color += grid(vec2(toCenter.x - 0.05, toCenter.y), .1);
 
     color.gb += bandMotive5Plate2(toCenter, 0.01 * cos(abs(radius - u_time * 2.)));
     toCenter.y *= -1.;
