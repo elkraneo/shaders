@@ -149,15 +149,21 @@ void main() {
 
     toCenter *= rotate(toCenter, abs(u_time / 21.0)); 
     toCenter = tile(toCenter, vec2(0.3, 0.3));
-    color += grid(vec2(toCenter.x - 0.05, toCenter.y), .1);
+    color += grid(vec2(toCenter.x, toCenter.y), .1);
 
-    color.gb += bandMotive5Plate2(toCenter, 0.01 * cos(abs(radius - u_time * 2.)));
-    toCenter.y *= -1.;
-    color.gb += bandMotive5Plate2(toCenter, 0.01 * cos(abs(radius - u_time * 2.)));
+    float width = 0.01 * cos(abs(radius - u_time * 2.));
+    float widthAlt = 0.01 / sin(abs(radius - u_time));
 
-    color.r -= bandMotive5Plate2(toCenter, 0.01 / sin(abs(radius - u_time)));
+    toCenter.x += 0.05;
+    toCenter = tile(toCenter, vec2(0.3, 0.3));
+
+    color.gb += bandMotive5Plate2(toCenter, width);
     toCenter.y *= -1.;
-    color.r -= bandMotive5Plate2(toCenter, 0.01 / sin(abs(radius - u_time)));
+    color.gb += bandMotive5Plate2(toCenter, width);
+
+    color.r -= bandMotive5Plate2(toCenter, widthAlt);
+    toCenter.y *= -1.;
+    color.r -= bandMotive5Plate2(toCenter, widthAlt);
 
     p = rotate(toCenter, abs(u_time / 2.0)); 
 
